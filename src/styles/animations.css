@@ -1,0 +1,83 @@
+/* Floating Background */
+
+@keyframes floatBlob {
+  0% {
+    transform: translateY(0px) translateX(0px);
+  }
+
+  50% {
+    transform: translateY(-40px) translateX(20px);
+  }
+
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+}
+
+/* Orb Glow */
+
+@keyframes orbGlow {
+  0% {
+    box-shadow:
+      0 0 30px #7c5cff,
+      0 0 80px rgba(124, 92, 255, .45);
+  }
+
+  50% {
+    box-shadow:
+      0 0 60px #00d4ff,
+      0 0 140px rgba(0, 212, 255, .55);
+  }
+
+  100% {
+    box-shadow:
+      0 0 30px #7c5cff,
+      0 0 80px rgba(124, 92, 255, .45);
+  }
+}
+
+/* Voice Wave */
+
+@keyframes voiceWave {
+  0% {
+    transform: scaleY(.4);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+
+  100% {
+    transform: scaleY(.4);
+  }
+}
+
+/* Fade Up */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Soft Glow */
+
+@keyframes softGlow {
+  0% {
+    opacity: .4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: .4;
+  }
+}
