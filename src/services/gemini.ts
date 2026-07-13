@@ -1,9 +1,7 @@
 import { speak } from "./speech";
 
-const CHAT_ID = "main";
-
 export async function askGemini(
-  prompt: string,
+  message: string,
   gender: "male" | "female" = "male"
 ): Promise<string> {
   try {
@@ -13,23 +11,24 @@ export async function askGemini(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt,
-        chatId: CHAT_ID,
+        message,
+        history: [],
       }),
     });
 
     const data = await response.json();
 
-    let reply = data.reply ?? "No response";
+    if (!response.ok) {
+      throw new Error(data.error || "Backend Error");
+    }
+
+    let reply = data.reply || "No response";
 
     reply = reply
       .replace(/[#*_`>-]/g, "")
       .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
       .replace(/https?:\/\/\S+/g, "")
-      .replace(
-        /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,
-        ""
-      )
+      .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, "")
       .replace(/\n{2,}/g, "\n")
       .trim();
 

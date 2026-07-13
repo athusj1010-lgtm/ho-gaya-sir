@@ -1,39 +1,64 @@
-import { Bot, User } from "lucide-react";
+import { memo, useEffect, useMemo, useState } from "react";
 
 type Props = {
   role: "user" | "assistant";
-  text: string;
+  content: string;
+  streaming?: boolean;
 };
 
-export default function Message({
+function Message({
   role,
-  text,
+  content,
+  streaming = false,
 }: Props) {
-  const isUser = role === "user";
+  const [display, setDisplay] = useState(
+    streaming ? "" : content
+  );
+
+  useEffect(() => {
+    if (!streaming) {
+      setDisplay(content);
+      return;
+    }
+
+    let i = 0;
+
+    setDisplay("");
+
+    const id = setInterval(() => {
+      i++;
+
+      setDisplay(content.slice(0, i));
+
+      if (i >= content.length) {
+        clearInterval(id);
+      }
+    }, 12);
+
+    return () => clearInterval(id);
+  }, [content, streaming]);
+
+  const text = useMemo(
+    () => (streaming ? display : content),
+    [streaming, display, content]
+  );
 
   return (
-    <div className={`message ${isUser ? "user" : "assistant"}`}>
-      {!isUser && (
-        <div className="message-avatar ai">
-          <Bot size={18} />
-        </div>
-      )}
-
+    <div
+      className={`message ${role}`}
+    >
       <div className="message-content">
-        <div className="message-name">
-          {isUser ? "You" : "Ho Gaya Sir"}
-        </div>
+        {text}
 
-        <div className="message-bubble">
-          {text}
-        </div>
+        {streaming &&
+          display.length < content.length && (
+            <span className="typing-cursor">
+              ▍
+            </span>
+          )}
       </div>
-
-      {isUser && (
-        <div className="message-avatar user">
-          <User size={18} />
-        </div>
-      )}
     </div>
   );
 }
+
+export default memo(Message);

@@ -1,53 +1,88 @@
-function cleanText(text: string) {
-  return text
-    .replace(/```[\s\S]*?```/g, "")
-    .replace(/`([^`]*)`/g, "$1")
-    .replace(/\*\*(.*?)\*\*/g, "$1")
-    .replace(/\*(.*?)\*/g, "$1")
-    .replace(/__(.*?)__/g, "$1")
-    .replace(/_(.*?)_/g, "$1")
-    .replace(/#+\s/g, "")
-    .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
-    .replace(/https?:\/\/\S+/g, "")
-    .replace(/<[^>]*>/g, "")
-    .replace(
-      /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu,
-      ""
-    )
-    .replace(/[•▪■▶►]/g, "")
-    .replace(/\|/g, "")
-    .replace(/\n+/g, ". ")
-    .replace(/\s+/g, " ")
-    .trim();
+// frontend/src/services/speech.ts
+
+class SpeechService {
+  private synth = window.speechSynthesis;
+
+  private voice: SpeechSynthesisVoice | null =
+    null;
+
+  constructor() {
+    if ("speechSynthesis" in window) {
+      this.loadVoice();
+
+      window.speechSynthesis.onvoiceschanged =
+        () => this.loadVoice();
+    }
+  }
+
+  private loadVoice() {
+    const voices = this.synth.getVoices();
+
+    this.voice =
+      voices.find(
+        (v) =>
+          v.lang === "en-IN" &&
+          /google|microsoft|india/i.test(v.name)
+      ) ||
+      voices.find((v) => v.lang === "en-IN") ||
+      voices.find((v) => v.lang === "hi-IN") ||
+      voices.find((v) => v.lang.startsWith("en")) ||
+      voices[0] ||
+      null;
+  }
+
+  speak(text: string): Promise<void> {
+    return new Promise((resolve) => {
+      if (!("speechSynthesis" in window)) {
+        resolve();
+        return;
+      }
+
+      this.stop();
+
+      const clean = text
+        .replace(/```[\s\S]*?```/g, "")
+        .replace(/`/g, "")
+        .replace(/[😀-🙏🌀-🛿🚀-🛿]/gu, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if (!clean) {
+        resolve();
+        return;
+      }
+
+      const utterance =
+        new SpeechSynthesisUtterance(clean);
+
+      utterance.voice = this.voice;
+
+      utterance.lang =
+        this.voice?.lang || "en-IN";
+
+      utterance.rate = 1;
+
+      utterance.pitch = 1;
+
+      utterance.volume = 1;
+
+      utterance.onend = () => resolve();
+
+      utterance.onerror = () => resolve();
+
+      this.synth.speak(utterance);
+    });
+  }
+
+  stop() {
+    if (this.synth.speaking) {
+      this.synth.cancel();
+    }
+  }
+
+  isSpeaking() {
+    return this.synth.speaking;
+  }
 }
 
-export function speak(
-  text: string,
-  gender: "male" | "female" = "male"
-) {
-  const finalText = cleanText(text);
-
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(finalText);
-
-  const voices = window.speechSynthesis.getVoices();
-
-  let voice =
-    voices.find(
-      (v) =>
-        /en-IN|hi-IN/i.test(v.lang) &&
-        (gender === "male"
-          ? /male|hemant|ravi|india/i.test(v.name)
-          : /female|veena|kalpana|india/i.test(v.name))
-    ) ||
-    voices.find((v) => /en-IN|hi-IN/i.test(v.lang)) ||
-    voices[0];
-
-  utterance.voice = voice;
-  utterance.rate = 1;
-  utterance.pitch = 1;
-  utterance.volume = 1;
-
-  window.speechSynthesis.speak(utterance);
-}
+export default new SpeechService();

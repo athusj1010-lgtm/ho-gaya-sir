@@ -1,0 +1,54 @@
+/* REPLACE ENTIRE FILE */
+/* src/components/Chat.css */
+
+.chat-section{
+
+    width:100%;
+
+    max-width:1200px;
+
+    margin:60px auto 0;
+
+    padding:0 20px;
+
+
+}
+
+
+
+.chat-box{
+
+
+    min-height:120px;
+
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+
+    border-radius:28px;
+
+
+    background:
+
+    rgba(18,22,40,.65);
+
+
+    border:
+
+    1px solid rgba(255,255,255,.08);
+
+
+    backdrop-filter:blur(20px);
+
+
+    color:#8f98b8;
+
+
+    font-size:18px;
+
+
+}

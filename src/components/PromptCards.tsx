@@ -1,53 +1,59 @@
-// src/components/PromptCards.tsx
+import {
+  Code2,
+  GraduationCap,
+  Search,
+  Sparkles,
+  ArrowRight,
+} from "lucide-react";
 
-const prompts = [
+import "./PromptCards.css";
+
+const cards = [
   {
-    icon: "💻",
-    title: "Coding",
-    text: "Build a React portfolio website",
+    icon: <Code2 size={24} strokeWidth={2.3} />,
+    title: "Code",
+    desc: "Write and debug code.",
   },
   {
-    icon: "📚",
+    icon: <GraduationCap size={24} strokeWidth={1.5} />,
     title: "Study",
-    text: "Explain Quantum Physics simply",
+    desc: "Learn step by step.",
   },
   {
-    icon: "✈️",
-    title: "Travel",
-    text: "Plan a 5-day Japan trip",
+    icon: <Search size={24} strokeWidth={2.3} />,
+    title: "Research",
+    desc: "Find accurate answers.",
   },
   {
-    icon: "💼",
-    title: "Business",
-    text: "Startup ideas for students",
+    icon: <Sparkles size={24} strokeWidth={2.3} />,
+    title: "More",
+    desc: "Explore AI tools.",
   },
 ];
 
 export default function PromptCards() {
   return (
-    <section className="prompt-section">
+    <section className="cards-grid">
+      {cards.map((card) => (
+        <button
+          key={card.title}
+          className="prompt-card"
+          type="button"
+        >
+          <div className="card-icon">
+            {card.icon}
+          </div>
 
-      <h3>Try asking...</h3>
+          <div className="card-content">
+            <h3>{card.title}</h3>
+            <p>{card.desc}</p>
+          </div>
 
-      <div className="prompt-grid">
-
-        {prompts.map((item) => (
-          <button
-            key={item.title}
-            className="prompt-card"
-          >
-            <div className="prompt-icon">
-              {item.icon}
-            </div>
-
-            <h4>{item.title}</h4>
-
-            <p>{item.text}</p>
-          </button>
-        ))}
-
-      </div>
-
+          <div className="card-arrow">
+            <ArrowRight size={0} strokeWidth={0} />
+          </div>
+        </button>
+      ))}
     </section>
   );
 }

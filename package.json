@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "^2.10.0",
     "lucide-react": "^1.23.0",
+    "multer": "^2.2.0",
+    "openai": "^6.46.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },

@@ -1,0 +1,100 @@
+.private-vault{
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        radial-gradient(circle at top left,#25205f,transparent 35%),
+        radial-gradient(circle at right,#142b55,transparent 40%),
+        #050817;
+
+    color:white;
+
+}
+
+.vault-card{
+
+    width:430px;
+
+    padding:40px;
+
+    border-radius:24px;
+
+    background:rgba(20,24,38,.85);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(20px);
+
+    text-align:center;
+
+}
+
+.vault-icon{
+
+    font-size:58px;
+
+    margin-bottom:18px;
+
+}
+
+.vault-card h1{
+
+    margin:0;
+
+    font-size:32px;
+
+    font-weight:700;
+
+}
+
+.vault-card p{
+
+    margin:18px 0 35px;
+
+    color:#9ca8cc;
+
+    line-height:1.6;
+
+    font-size:15px;
+
+}
+
+.vault-btn{
+
+    width:100%;
+
+    height:52px;
+
+    border:none;
+
+    border-radius:16px;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    background:linear-gradient(
+        135deg,
+        #6d63ff,
+        #3b82f6
+    );
+
+    transition:.25s;
+
+}
+
+.vault-btn:hover{
+
+    transform:translateY(-2px);
+
+}

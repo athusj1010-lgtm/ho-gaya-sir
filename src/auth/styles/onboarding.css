@@ -1,0 +1,156 @@
+// frontend/src/auth/pages/Onboarding.tsx
+
+import { useState } from "react";
+import {
+  GraduationCap,
+  Briefcase,
+  Code2,
+  Palette,
+  Brain,
+  ArrowRight,
+} from "lucide-react";
+
+import AuthLayout from "../components/AuthLayout";
+import AuthCard from "../components/AuthCard";
+import AuthButton from "../components/AuthButton";
+import StepTitle from "../components/StepTitle";
+
+import { getUser, login } from "../utils/storage";
+
+export default function Onboarding() {
+  const [role, setRole] = useState<
+    "student" | "developer" | "designer" | "business"
+  >("student");
+
+  function finish() {
+    const user = getUser();
+
+    if (!user) return;
+
+    login({
+      ...user,
+      role,
+      onboardingCompleted: true,
+    });
+  }
+
+  return (
+    <AuthLayout>
+      <AuthCard>
+
+        <StepTitle
+          title="Personalize your AI"
+          subtitle="Choose your primary role."
+        />
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2,1fr)",
+            gap: 16,
+            marginBottom: 30,
+          }}
+        >
+
+          <button
+            onClick={() => setRole("student")}
+            style={card(role === "student")}
+          >
+            <GraduationCap size={28} />
+            <span>Student</span>
+          </button>
+
+          <button
+            onClick={() => setRole("developer")}
+            style={card(role === "developer")}
+          >
+            <Code2 size={28} />
+            <span>Developer</span>
+          </button>
+
+          <button
+            onClick={() => setRole("designer")}
+            style={card(role === "designer")}
+          >
+            <Palette size={28} />
+            <span>Designer</span>
+          </button>
+
+          <button
+            onClick={() => setRole("business")}
+            style={card(role === "business")}
+          >
+            <Briefcase size={28} />
+            <span>Business</span>
+          </button>
+
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            padding: 18,
+            borderRadius: 18,
+            marginBottom: 28,
+            background: "rgba(99,102,241,.08)",
+            border: "1px solid rgba(99,102,241,.15)",
+            color: "#CBD5E1",
+            lineHeight: 1.6,
+          }}
+        >
+          <Brain size={20} />
+
+          <span>
+            You can change this anytime later from Settings.
+          </span>
+        </div>
+
+        <AuthButton onClick={finish}>
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 10,
+            }}
+          >
+            Continue
+            <ArrowRight size={18} />
+          </span>
+        </AuthButton>
+
+      </AuthCard>
+    </AuthLayout>
+  );
+}
+
+function card(active: boolean): React.CSSProperties {
+  return {
+    height: 120,
+
+    border: active
+      ? "2px solid #6366F1"
+      : "1px solid rgba(255,255,255,.08)",
+
+    borderRadius: 20,
+
+    background: active
+      ? "linear-gradient(135deg,rgba(99,102,241,.22),rgba(59,130,246,.15))"
+      : "rgba(255,255,255,.05)",
+
+    color: "#fff",
+
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+
+    gap: 12,
+
+    cursor: "pointer",
+
+    transition: "all .25s ease",
+  };
+}

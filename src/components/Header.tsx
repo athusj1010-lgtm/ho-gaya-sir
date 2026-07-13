@@ -1,33 +1,82 @@
-import { Menu, Plus, User } from "lucide-react";
+// src/components/Header.tsx
 
-export default function Header() {
+import { AlignJustify, User, Mic, Shield } from "lucide-react";
+
+import "./Header.css";
+
+type Props = {
+  onMenuClick: () => void;
+  privateMode: boolean;
+};
+
+export default function Header({
+  onMenuClick,
+  privateMode,
+}: Props) {
   return (
     <header className="header">
+
       <div className="header-left">
-        <button className="icon-btn">
-          <Menu size={22} />
+
+        <button
+          className="menu-btn"
+          type="button"
+          onClick={onMenuClick}
+        >
+          <AlignJustify size={22} strokeWidth={2.3} />
         </button>
 
-        <div className="brand">
-          <div className="brand-logo">H</div>
+        <div className="header-logo">
 
-          <div className="brand-text">
-            <h1>Ho Gaya Sir</h1>
-            <span>AI Work Partner</span>
+          <div className="logo-circle">
+            H
           </div>
+
+          <div className="logo-text">
+
+            <h2>Ho Gaya Sir</h2>
+
+            <span>AI Workspace</span>
+
+          </div>
+
         </div>
+
+        {privateMode && (
+          <div className="private-badge">
+
+            <Shield size={14} />
+
+            <span>Private Chat</span>
+
+          </div>
+        )}
+
       </div>
 
       <div className="header-right">
-        <button className="new-chat-btn">
-          <Plus size={18} />
-          <span>New Chat</span>
+
+        <button
+          className="voice-btn"
+          type="button"
+        >
+          <Mic size={16} strokeWidth={2.3} />
+
+          <span>Voice Mode</span>
+
         </button>
 
-        <button className="profile-btn">
-          <User size={20} />
+        <button
+          className="profile-btn"
+          type="button"
+        >
+          <div className="profile-avatar">
+            <User size={18} />
+          </div>
         </button>
+
       </div>
+
     </header>
   );
 }

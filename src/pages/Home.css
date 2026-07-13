@@ -1,0 +1,41 @@
+.home{
+    min-height:100vh;
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    background:
+        radial-gradient(circle at top,#1c3d82 0%,transparent 28%),
+        radial-gradient(circle at left,#1b1f56 0%,transparent 35%),
+        #080b14;
+
+    color:#fff;
+}
+
+.home-content{
+
+    width:100%;
+    max-width:1000px;
+
+    margin:0 auto;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    padding:20px 15px 25px;
+
+}
+.sidebar-overlay{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    background:transparent;
+
+    z-index:998;
+
+}
