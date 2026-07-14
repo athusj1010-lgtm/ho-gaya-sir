@@ -1,325 +1,549 @@
-// frontend/src/pages/VoiceMode.tsx
+// src/pages/VoiceMode.tsx
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Mic,
-  PhoneOff,
+  MicOff,
   MessageSquare,
-  Sparkles,
+  ChevronRight,
+  X,
 } from "lucide-react";
 
+import "./VoiceMode.css";
+
 import { openHome } from "../services/navigation";
-
-import voice from "../services/voice";
-import speech from "../services/speech";
-
+import { useVoiceContext } from "../context/VoiceContext";
 import {
   sendMessage,
-  type ChatMessage,
+  clearHistory,
 } from "../services/chat";
+import speech from "../services/speech";
 
 export default function VoiceMode() {
-  const [status, setStatus] = useState<
-    "Listening..." |
-    "Thinking..." |
-    "Speaking..." |
-    "Stopped"
-  >("Listening...");
+  const {
+    voice,
+    setVoice,
+    resetVoice,
+  } = useVoiceContext();
 
-  const [userText, setUserText] = useState("");
+  const recognitionRef =
+    useRef<any>(null);
 
-  const [aiText, setAiText] = useState(
-    "I'm listening..."
-  );
+  const recognitionRunning =
+    useRef(false);
+
+  const shouldListen =
+    useRef(true);
+
+  const micEnabledRef =
+    useRef(true);
+
+  const [micEnabled, setMicEnabled] =
+    useState(true);
+
+  const [showChat, setShowChat] =
+    useState(false);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
+    micEnabledRef.current =
+      micEnabled;
+  }, [micEnabled]);
 
-    voice.onStart = () => {
-      setStatus("Listening...");
+  useEffect(() => {
+    const SpeechRecognition =
+      (window as any)
+        .SpeechRecognition ||
+      (window as any)
+        .webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      setVoice({
+        status: "error",
+        error:
+          "Speech Recognition is not supported.",
+      });
+
+      return;
+    }
+
+    const recognition =
+      new SpeechRecognition();
+
+    recognitionRef.current =
+      recognition;
+
+    recognition.lang = "en-IN";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      recognitionRunning.current =
+        true;
+
+      setVoice({
+        status: "listening",
+        isListening: true,
+        isSpeaking: false,
+        error: "",
+      });
     };
 
-    voice.onEnd = () => {
-      setStatus("Stopped");
-    };
+    recognition.onresult =
+      async (event: any) => {
+        let finalText = "";
+        let interim = "";
 
-    voice.onResult = (text: string) => {
-      setUserText(text);
+        for (
+          let i = event.resultIndex;
+          i < event.results.length;
+          i++
+        ) {
+          const result =
+            event.results[i];
 
-      clearTimeout(timer);
+          if (result.isFinal) {
+            finalText +=
+              result[0].transcript + " ";
+          } else {
+            interim +=
+              result[0].transcript;
+          }
+        }
 
-      timer = setTimeout(async () => {
-        if (!text.trim()) return;
+        setVoice({
+          transcript:
+            finalText.trim(),
+          interimTranscript:
+            interim,
+        });
+
+        if (!finalText.trim())
+          return;
+
+        if (
+          recognitionRunning.current
+        ) {
+          try {
+            recognition.stop();
+          } catch {}
+
+          recognitionRunning.current =
+            false;
+        }
+
+        setVoice({
+          status: "processing",
+          isListening: false,
+        });
 
         try {
-          voice.stop();
+          const { reply } =
+            await sendMessage(
+              finalText.trim()
+            );
 
-          setStatus("Thinking...");
+          setVoice({
+            status: "speaking",
+            response: reply,
+            isSpeaking: true,
+          });
 
-          const history: ChatMessage[] = [];
+          await speech.speak(reply);
+                    setVoice({
+            status: "listening",
+            transcript: "",
+            interimTranscript: "",
+            response: "",
+            isSpeaking: false,
+          });
 
-          const data = await sendMessage(
-            text,
-            history
-          );
+          if (
+            shouldListen.current &&
+            micEnabledRef.current
+          ) {
+            setTimeout(() => {
+              if (
+                !recognitionRunning.current
+              ) {
+                try {
+                  recognition.start();
+                } catch {}
+              }
+            }, 150);
+          }
 
-          setAiText(data.reply);
+        } catch (err: any) {
 
-          setStatus("Speaking...");
+          setVoice({
+            status: "error",
+            error:
+              err.message ??
+              "Connection Error",
+            isSpeaking: false,
+          });
 
-          await speech.speak(data.reply);
+          setTimeout(() => {
 
-          setStatus("Listening...");
+            if (
+              shouldListen.current &&
+              micEnabledRef.current
+            ) {
 
-          voice.start();
-        } catch {
-          setAiText(
-            "Something went wrong."
-          );
+              setVoice({
+                status: "listening",
+                error: "",
+              });
 
-          setStatus("Listening...");
+              if (
+                !recognitionRunning.current
+              ) {
+                try {
+                  recognition.start();
+                } catch {}
+              }
 
-          voice.start();
+            }
+
+          }, 1000);
+
         }
-      }, 700);
-    };
 
-    voice.start();
+      };
 
-    return () => {
-      clearTimeout(timer);
+      recognition.onerror = () => {
 
-      speech.stop();
-      voice.stop();
+        recognitionRunning.current =
+          false;
 
-      voice.onResult = undefined;
-      voice.onStart = undefined;
-      voice.onEnd = undefined;
-    };
+        setVoice({
+          status: "error",
+          isListening: false,
+        });
+
+      };
+      // =======================
+// PART 3 / 6
+// =======================
+
+      recognition.onend = () => {
+
+        recognitionRunning.current =
+          false;
+
+        if (
+          !shouldListen.current
+        )
+          return;
+
+        if (
+          !micEnabledRef.current
+        )
+          return;
+
+        if (
+          speech.isSpeaking()
+        )
+          return;
+
+        setTimeout(() => {
+
+          if (
+            !recognitionRunning.current
+          ) {
+            try {
+              recognition.start();
+            } catch {}
+          }
+
+        }, 200);
+
+      };
+
+      try {
+        recognition.start();
+      } catch {}
+
+      return () => {
+
+        shouldListen.current =
+          false;
+
+        recognitionRunning.current =
+          false;
+
+        try {
+          recognition.abort();
+        } catch {}
+
+        speech.stop();
+
+        clearHistory();
+
+        resetVoice();
+
+      };
+
   }, []);
 
+  function toggleMic() {
+
+    const recognition =
+      recognitionRef.current;
+
+    if (!recognition) return;
+
+    if (micEnabled) {
+
+      shouldListen.current =
+        false;
+
+      micEnabledRef.current =
+        false;
+
+      setMicEnabled(false);
+
+      try {
+        recognition.abort();
+      } catch {}
+
+      speech.stop();
+
+      setVoice({
+        status: "idle",
+        isListening: false,
+        isSpeaking: false,
+      });
+
+      return;
+
+    }
+
+    shouldListen.current =
+      true;
+
+    micEnabledRef.current =
+      true;
+
+    setMicEnabled(true);
+
+    setVoice({
+      status: "listening",
+      error: "",
+    });
+
+    try {
+      recognition.start();
+    } catch {}
+
+  }
+  // =======================
+// PART 4 / 6
+// =======================
+
+  function endVoiceMode() {
+
+    shouldListen.current =
+      false;
+
+    micEnabledRef.current =
+      false;
+
+    recognitionRunning.current =
+      false;
+
+    try {
+      recognitionRef.current?.abort();
+    } catch {}
+
+    speech.stop();
+
+    clearHistory();
+
+    resetVoice();
+
+    openHome();
+
+  }
+
+  const orbClass =
+    voice.status === "listening"
+      ? "listening"
+      : voice.status === "processing"
+      ? "thinking"
+      : voice.status === "speaking"
+      ? "speaking"
+      : voice.status === "error"
+      ? "error"
+      : "";
+
+  const statusText =
+    !micEnabled
+      ? "Microphone Off"
+      : voice.status === "listening"
+      ? "Listening..."
+      : voice.status === "processing"
+      ? "Thinking..."
+      : voice.status === "speaking"
+      ? "Speaking..."
+      : voice.status === "error"
+      ? "Connection Error"
+      : "Ready";
+
   return (
-    <main
-      style={{
-        minHeight: "100vh",
+    <main className="voice-mode">
 
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-
-        padding: 30,
-
-        background:
-          "radial-gradient(circle at top,#1A1D38,#060816)",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 760,
-
-          borderRadius: 34,
-
-          padding: 42,
-
-          textAlign: "center",
-
-          background:
-            "rgba(255,255,255,.05)",
-
-          border:
-            "1px solid rgba(255,255,255,.08)",
-
-          backdropFilter: "blur(24px)",
-        }}
+      <button
+        className="voice-close"
+        onClick={endVoiceMode}
       >
-        <div
-          style={{
-            display: "inline-flex",
-            gap: 8,
-            alignItems: "center",
+        <X size={20} />
+      </button>
 
-            padding: "8px 18px",
-
-            borderRadius: 999,
-
-            background:
-              "rgba(99,102,241,.12)",
-
-            color: "#C7D2FE",
-
-            fontWeight: 700,
-
-            marginBottom: 26,
-          }}
-        >
-          <Sparkles size={16} />
-          VOICE MODE
-        </div>
+      <div className="voice-content">
 
         <div
-          style={{
-            width: 170,
-            height: 170,
-
-            margin: "0 auto",
-
-            borderRadius: "50%",
-
-            display: "grid",
-            placeItems: "center",
-
-            background:
-              "linear-gradient(135deg,#6366F1,#3B82F6)",
-
-            boxShadow:
-              "0 0 80px rgba(99,102,241,.45)",
-          }}
+          className={`voice-orb ${orbClass}`}
         >
-          <Mic size={56} color="#fff" />
+          <div className="orb-ring ring-1" />
+          <div className="orb-ring ring-2" />
+          <div className="orb-ring ring-3" />
+
+          <div className="orb-core">
+            <Mic size={54} />
+          </div>
         </div>
 
-        <h1
-          style={{
-            marginTop: 34,
-            color: "#fff",
-            fontSize: 42,
-          }}
-        >
-          {status}
-        </h1>
+        <h1>ORBITAL</h1>
 
-        <p
-          style={{
-            color: "#94A3B8",
-            marginTop: 12,
-          }}
-        >
-          Speak naturally. Ho Gaya Sir is listening.
+        <p className="voice-status">
+          {statusText}
         </p>
+        
 
-        <div
-          style={{
-            marginTop: 36,
+        <div className="voice-actions">
 
-            textAlign: "left",
-
-            padding: 22,
-
-            borderRadius: 20,
-
-            background:
-              "rgba(255,255,255,.04)",
-          }}
-        >
-          <strong
-            style={{
-              color: "#A5B4FC",
-            }}
-          >
-            You
-          </strong>
-
-          <p
-            style={{
-              color: "#fff",
-              marginTop: 10,
-            }}
-          >
-            {userText || "..."}
-          </p>
-        </div>
-
-        <div
-          style={{
-            marginTop: 18,
-
-            textAlign: "left",
-
-            padding: 22,
-
-            borderRadius: 20,
-
-            background:
-              "rgba(255,255,255,.04)",
-          }}
-        >
-          <strong
-            style={{
-              color: "#60A5FA",
-            }}
-          >
-            Ho Gaya Sir
-          </strong>
-
-          <p
-            style={{
-              color: "#fff",
-              marginTop: 10,
-            }}
-          >
-            {aiText}
-          </p>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: 16,
-            marginTop: 34,
-            flexWrap: "wrap",
-          }}
-        >
           <button
-            onClick={openHome}
-            style={secondaryBtn}
+            className={`mic-toggle ${
+              micEnabled
+                ? "active"
+                : "inactive"
+            }`}
+            onClick={toggleMic}
           >
-            <MessageSquare size={18} />
-            Open Chat
+            {micEnabled ? (
+              <Mic size={18} />
+            ) : (
+              <MicOff size={18} />
+            )}
+
+            <span>
+              {micEnabled
+                ? "Mic ON"
+                : "Mic OFF"}
+            </span>
+
           </button>
 
           <button
-            onClick={() => {
-              speech.stop();
-              voice.stop();
-              openHome();
-            }}
-            style={dangerBtn}
+            className="chat-toggle"
+            onClick={() =>
+              setShowChat(
+                !showChat
+              )
+            }
           >
-            <PhoneOff size={18} />
-            End Conversation
+            <MessageSquare
+              size={18}
+            />
+
+            <span>
+              View Chat
+            </span>
+
           </button>
+
         </div>
+
+        {showChat && (
+
+          <div className="chat-panel">
+
+            <div className="chat-header">
+
+              <h3>
+                Conversation
+              </h3>
+
+              <button
+                className="chat-close"
+                onClick={() =>
+                  setShowChat(
+                    false
+                  )
+                }
+              >
+                <X size={18} />
+              </button>
+
+            </div>
+
+            <div className="chat-body">
+
+              {voice.transcript && (
+
+                <div className="chat-user">
+
+                  <strong>You</strong>
+
+                  <p>
+                    {voice.transcript}
+                  </p>
+
+                </div>
+
+              )}
+
+              {voice.response && (
+
+                <div className="chat-ai">
+
+                  <strong>ORBITAL</strong>
+
+                  <p>
+                    {voice.response}
+                  </p>
+
+                </div>
+
+              )}
+
+              {!voice.transcript &&
+                !voice.response && (
+
+                <div className="chat-empty">
+
+                  Start talking to ORBITAL...
+
+                </div>
+
+              )}
+
+            </div>
+
+          </div>
+
+        )}
+
+        <button
+          className="voice-end"
+          onClick={endVoiceMode}
+        >
+          End Session
+        </button>
+
       </div>
+
     </main>
   );
 }
-
-const secondaryBtn: React.CSSProperties = {
-  height: 54,
-  padding: "0 24px",
-
-  borderRadius: 16,
-
-  border: "none",
-
-  background: "#1F2937",
-
-  color: "#fff",
-
-  display: "flex",
-  alignItems: "center",
-  gap: 10,
-
-  cursor: "pointer",
-
-  fontWeight: 600,
-};
-
-const dangerBtn: React.CSSProperties = {
-  ...secondaryBtn,
-
-  background:
-    "linear-gradient(135deg,#EF4444,#DC2626)",
-};
