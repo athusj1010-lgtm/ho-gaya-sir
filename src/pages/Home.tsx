@@ -27,8 +27,10 @@ type HomeProps = {
   >;
 
   setCurrentPage: React.Dispatch<
-    React.SetStateAction<"home" | "vault">
-  >;
+  React.SetStateAction<
+    "home" | "vault" | "voice"
+  >
+>;
 };
 
 export default function Home({
@@ -46,12 +48,14 @@ export default function Home({
   return (
     <main className="home">
       <Header
-        onMenuClick={() =>
-          setSidebarOpen(!sidebarOpen)
-        }
-        privateMode={privateMode}
-      />
-
+    onMenuClick={() =>
+      setSidebarOpen(!sidebarOpen)
+    }
+    privateMode={privateMode}
+    onVoiceClick={() =>
+      setCurrentPage("voice")
+    }
+/>
       <Sidebar
         open={sidebarOpen}
         setSidebarOpen={setSidebarOpen}

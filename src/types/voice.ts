@@ -1,13 +1,22 @@
 // src/types/voice.ts
 
-export type VoiceStatus =
-  | "idle"
-  | "listening"
-  | "processing"
-  | "speaking"
-  | "paused"
-  | "stopped"
-  | "error";
+export interface VoiceState {
+  status: VoiceStatus;
+
+  transcript: string;
+
+  interimTranscript: string;
+
+  response: string;
+
+  isListening: boolean;
+
+  isSpeaking: boolean;
+
+  error?: string;
+
+  startedAt?: number;
+}
 
 export interface VoiceTranscript {
   id: string;

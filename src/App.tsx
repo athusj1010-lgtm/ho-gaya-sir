@@ -1,6 +1,7 @@
 // REPLACE ENTIRE FILE
 // src/App.tsx
 
+import VoiceMode from "./pages/VoiceMode";
 import Home from "./pages/Home";
 import PrivateVault from "./pages/PrivateVault";
 
@@ -18,24 +19,26 @@ export default function App() {
   const [privateMode, setPrivateMode] = useState(false);
 
   const [currentPage, setCurrentPage] = useState<
-    "home" | "vault"
-  >("home");
+  "home" | "vault" | "voice"
+>("home");
 
   return (
     <SettingsProvider>
       <VoiceProvider>
         <ChatProvider>
-          {currentPage === "vault" ? (
-            <PrivateVault />
-          ) : (
-            <Home
-              sidebarOpen={sidebarOpen}
-              setSidebarOpen={setSidebarOpen}
-              privateMode={privateMode}
-              setPrivateMode={setPrivateMode}
-              setCurrentPage={setCurrentPage}
-            />
-          )}
+          {currentPage === "voice" ? (
+  <VoiceMode />
+) : currentPage === "vault" ? (
+  <PrivateVault />
+) : (
+  <Home
+    sidebarOpen={sidebarOpen}
+    setSidebarOpen={setSidebarOpen}
+    privateMode={privateMode}
+    setPrivateMode={setPrivateMode}
+    setCurrentPage={setCurrentPage}
+  />
+)}
         </ChatProvider>
       </VoiceProvider>
     </SettingsProvider>

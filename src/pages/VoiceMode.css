@@ -1,45 +1,47 @@
-/* REPLACE ENTIRE FILE */
-/* src/pages/VoiceMode.css */
+/* =========================================================
+   VOICE MODE CSS
+   PART 1 / 4
+   REPLACE FROM TOP OF FILE
+   ========================================================= */
 
 .voice-mode{
     position:fixed;
     inset:0;
-
     display:flex;
     justify-content:center;
     align-items:center;
-
     overflow:hidden;
 
     background:
-    radial-gradient(circle at top,#2563EB22 0%,transparent 35%),
-    radial-gradient(circle at bottom right,#7C3AED18 0%,transparent 40%),
+    radial-gradient(circle at top,#2563EB22 0%,transparent 38%),
+    radial-gradient(circle at bottom right,#7C3AED18 0%,transparent 42%),
     linear-gradient(
         180deg,
-        #060B16 0%,
-        #0B1120 45%,
+        #050816 0%,
+        #0B1120 50%,
         #050912 100%
     );
 
     animation:fadeIn .45s ease;
 }
+
 .voice-mode::before{
 
     content:"";
 
     position:absolute;
 
-    width:650px;
-    height:650px;
+    width:720px;
+    height:720px;
 
     border-radius:50%;
 
     background:
     radial-gradient(circle,
-    rgba(37,99,235,.18),
-    transparent 70%);
+    rgba(59,130,246,.18),
+    transparent 72%);
 
-    filter:blur(80px);
+    filter:blur(90px);
 
     animation:floatGlow 10s ease-in-out infinite;
 
@@ -52,30 +54,30 @@
     content:"";
 
     position:absolute;
-
     inset:0;
 
     background:
     radial-gradient(circle at 80% 20%,
     rgba(124,58,237,.08),
-    transparent 25%);
+    transparent 28%);
 
     pointer-events:none;
 
 }
+
 .voice-content{
 
     position:relative;
     z-index:5;
 
     width:100%;
-    max-width:460px;
+    max-width:520px;
 
     display:flex;
     flex-direction:column;
     align-items:center;
 
-    padding:40px 24px;
+    padding:48px 30px;
 
 }
 
@@ -83,23 +85,22 @@
 
     position:absolute;
 
-    top:24px;
-    right:24px;
+    top:26px;
+    right:26px;
 
-    width:42px;
-    height:42px;
+    width:46px;
+    height:46px;
 
     display:flex;
     justify-content:center;
     align-items:center;
 
     border:none;
-
-    border-radius:12px;
+    border-radius:14px;
 
     background:rgba(255,255,255,.05);
 
-    backdrop-filter:blur(16px);
+    backdrop-filter:blur(18px);
 
     color:#CBD5E1;
 
@@ -111,20 +112,34 @@
 
 .voice-close:hover{
 
+    transform:scale(1.08);
+
     background:rgba(59,130,246,.15);
 
-    color:white;
+    color:#fff;
 
 }
 
-.voice-close:hover{
-    transform:scale(1.08);
-    background:rgba(255,255,255,.14);
-}
+/* =========================================================
+   ORB
+   ========================================================= */
 
 .voice-orb{
 
     position:relative;
+
+    width:220px;
+    height:220px;
+
+    margin-bottom:26px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+
+.orb-core{
 
     width:165px;
     height:165px;
@@ -136,50 +151,28 @@
     align-items:center;
 
     background:
-    radial-gradient(circle at 35% 30%,
-    #8CC8FF 0%,
-    #3B82F6 45%,
-    #1D4ED8 75%,
-    #0F172A 100%);
+    radial-gradient(circle at 30% 30%,
+    #ffd56a 0%,
+    #ffbf47 42%,
+    #f6a81b 100%);
 
     box-shadow:
-    0 0 35px rgba(59,130,246,.30),
-    0 0 70px rgba(59,130,246,.12),
-    inset 0 0 22px rgba(255,255,255,.15);
+    0 0 25px rgba(255,190,40,.45),
+    0 0 80px rgba(255,180,40,.18),
+    inset 0 -10px 18px rgba(0,0,0,.18);
 
-    animation:
-    orbFloat 5s ease-in-out infinite;
-
-}
-.orb-core{
-
-    width:90px;
-    height:90px;
-
-    border-radius:50%;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    background:
-    radial-gradient(circle,
-    #60A5FA,
-    #2563EB);
-
-    color:white;
-
-    box-shadow:
-    inset 0 0 12px rgba(255,255,255,.25);
+    color:#111;
 
     z-index:5;
+
+    transition:.35s;
 
 }
 
 .orb-core svg{
 
-    width:40px;
-    height:40px;
+    width:42px;
+    height:42px;
 
 }
 
@@ -189,9 +182,7 @@
 
     border-radius:50%;
 
-    border:1.5px solid rgba(96,165,250,.22);
-
-    animation:ringSpin 18s linear infinite;
+    border:1px solid rgba(255,200,40,.25);
 
 }
 
@@ -204,621 +195,107 @@
 
 .ring-2{
 
-    width:205px;
-    height:205px;
-
-    animation-direction:reverse;
-    animation-duration:24s;
+    width:215px;
+    height:215px;
 
 }
 
 .ring-3{
 
-    width:225px;
-    height:225px;
-
-    animation-duration:30s;
+    width:245px;
+    height:245px;
 
 }
 
-.voice-orb.listening{
-
-    animation:
-    orbFloat 4s ease-in-out infinite,
-    listeningGlow 1.8s ease-in-out infinite;
-
-}
-
-.voice-orb.thinking{
-
-    animation:
-    orbFloat 4s ease-in-out infinite,
-    thinkingGlow 1.2s linear infinite;
-
-}
-
-.voice-orb.speaking{
-
-    animation:
-    orbFloat 4s ease-in-out infinite,
-    speakingPulse .7s ease-in-out infinite;
-
-}
-
-.voice-orb.error{
-
-    animation:errorShake .45s;
-
-    box-shadow:
-    0 0 45px rgba(255,60,60,.45);
-
-}
-
-.voice-status{
-
-    margin-bottom:28px;
-
-    color:#94A3B8;
-
-    font-size:13px;
-
-    font-weight:500;
-
-    letter-spacing:1.5px;
-
-}
-
-.voice-content h1{
-
-    margin-top:24px;
-    margin-bottom:6px;
-
-    color:#F8FAFC;
-
-    font-size:38px;
-
-    font-weight:700;
-
-    letter-spacing:4px;
-
-}
-.voice-end{
-
-    width:190px;
-    height:46px;
-
-    margin-top:28px;
-
-    border:none;
-    border-radius:14px;
-
-    background:#1E293B;
-
-    color:#E5E7EB;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:.25s;
-}
-
-.voice-end:hover{
-
-    background:#334155;
-
-    transform:translateY(-2px);
-
-}
-
-.voice-end:hover{
-
-    transform:translateY(-2px);
-
-    background:#ef4444;
-
-}
-.voice-end:hover{
-
-    transform:translateY(-3px);
-
-    box-shadow:
-    0 15px 40px rgba(255,0,0,.28);
-
-}
-
-.voice-end:hover{
-    transform:translateY(-2px);
-    background:#3b82f6;
-}
-
-@keyframes orbIdle{
-    from{
-        transform:rotate(0deg);
-    }
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-@keyframes listenPulse{
-    0%{
-        transform:scale(1);
-    }
-    50%{
-        transform:scale(1.08);
-    }
-    100%{
-        transform:scale(1);
-    }
-}
-
-@keyframes listenRing{
-    0%{
-        transform:scale(.9);
-        opacity:.2;
-    }
-    100%{
-        transform:scale(1.22);
-        opacity:0;
-    }
-}
-
-@keyframes thinking{
-    0%{
-        transform:translateY(0) scale(1);
-    }
-    50%{
-        transform:translateY(-10px) scale(1.05);
-    }
-    100%{
-        transform:translateY(0) scale(1);
-    }
-}
-
-@keyframes spin{
-    from{
-        transform:rotate(0deg);
-    }
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-@keyframes speaking{
-    0%{
-        transform:scale(1);
-    }
-    20%{
-        transform:scale(1.14);
-    }
-    50%{
-        transform:scale(.97);
-    }
-    100%{
-        transform:scale(1);
-    }
-}
-
-@keyframes speakRing{
-    from{
-        transform:scale(1);
-        opacity:.7;
-    }
-    to{
-        transform:scale(1.35);
-        opacity:0;
-    }
-}
-
-@keyframes shake{
-    0%{transform:translateX(-3px);}
-    50%{transform:translateX(3px);}
-    100%{transform:translateX(-3px);}
-}
-/* ===========================
-   LIVE VOICE ORB
-=========================== */
-
-.voice-bars{
-    position:absolute;
-    inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:flex-end;
-    gap:5px;
-    pointer-events:none;
-}
-
-.voice-bars span{
-    width:5px;
-    height:20px;
-    border-radius:999px;
-    background:#5eead4;
-    transform-origin:bottom;
-    animation:voiceWave 1s infinite ease-in-out;
-}
-
-.voice-bars span:nth-child(1){animation-delay:.0s;}
-.voice-bars span:nth-child(2){animation-delay:.1s;}
-.voice-bars span:nth-child(3){animation-delay:.2s;}
-.voice-bars span:nth-child(4){animation-delay:.3s;}
-.voice-bars span:nth-child(5){animation-delay:.15s;}
-.voice-bars span:nth-child(6){animation-delay:.25s;}
-.voice-bars span:nth-child(7){animation-delay:.05s;}
-
-.voice-orb.listening .orb-core{
-    animation:breath 2s infinite ease-in-out;
-}
-
-.voice-orb.listening .voice-bars span{
-    animation-play-state:running;
-}
-
-.voice-orb:not(.listening) .voice-bars span{
-    animation-play-state:paused;
-}
-
-@keyframes breath{
-    0%{
-        transform:scale(1);
-        box-shadow:0 0 20px #3b82f6;
-    }
-    50%{
-        transform:scale(1.12);
-        box-shadow:
-            0 0 60px #3b82f6,
-            0 0 120px rgba(59,130,246,.4);
-    }
-    100%{
-        transform:scale(1);
-    }
-}
-
-@keyframes voiceWave{
-    0%{
-        transform:scaleY(.4);
-    }
-    20%{
-        transform:scaleY(2.3);
-    }
-    40%{
-        transform:scaleY(.8);
-    }
-    60%{
-        transform:scaleY(2.8);
-    }
-    80%{
-        transform:scaleY(1.1);
-    }
-    100%{
-        transform:scaleY(.4);
-    }
-}
-/* ADD TO VoiceMode.css */
-
-/* ===========================
-   GOLDEN ORBITAL
-=========================== */
-
-.voice-orb{
-    position:relative;
-    width:220px;
-    height:220px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-bottom:28px;
-}
-
-.orb-core{
-    width:170px;
-    height:170px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        radial-gradient(circle at 30% 30%,
-        #ffd56a 0%,
-        #ffbf47 40%,
-        #f6a81b 100%);
-
-    box-shadow:
-        0 0 25px rgba(255,180,40,.45),
-        inset 0 -12px 25px rgba(0,0,0,.18);
-
-    z-index:5;
-
-    transition:.35s;
-}
-
-.orb-core svg{
-    color:#111;
-}
-
-/* ===========================
-   RINGS
-=========================== */
-
-.orb-ring{
-    position:absolute;
-    border-radius:50%;
-    border:1px solid rgba(255,180,40,.25);
-}
-
-.ring-1{
-    width:190px;
-    height:190px;
-}
-
-.ring-2{
-    width:220px;
-    height:220px;
-}
-
-.ring-3{
-    width:250px;
-    height:250px;
-}
-
-/* ===========================
-   LISTENING
-=========================== */
+/* =========================================================
+   STATES
+   ========================================================= */
 
 .voice-orb.listening .orb-core{
 
     animation:
-    pulse 1.5s infinite ease-in-out,
+    pulse 1.6s infinite ease-in-out,
     breathing 2s infinite;
+
 }
 
 .voice-orb.listening .ring-1{
+
     animation:ringWave 1.4s infinite;
+
 }
 
 .voice-orb.listening .ring-2{
+
     animation:ringWave 1.4s .25s infinite;
+
 }
 
 .voice-orb.listening .ring-3{
-    animation:ringWave 1.4s .5s infinite;
-}
 
-/* ===========================
-   THINKING
-=========================== */
+    animation:ringWave 1.4s .5s infinite;
+
+}
 
 .voice-orb.thinking{
-    animation:rotateOrb 5s linear infinite;
-}
 
-.voice-orb.thinking .orb-core{
-    filter:hue-rotate(15deg);
-}
+    animation:rotateOrb 6s linear infinite;
 
-/* ===========================
-   SPEAKING
-=========================== */
+}
 
 .voice-orb.speaking .orb-core{
 
-    animation:
-    speaking 0.45s infinite alternate;
-}
+    animation:speaking .5s infinite;
 
-/* ===========================
-   ERROR
-=========================== */
+}
 
 .voice-orb.error .orb-core{
 
     background:
     linear-gradient(
     135deg,
-    #ff5757,
-    #ff2323);
+    #ff4d4d,
+    #d60000);
 
     animation:shake .35s infinite;
+
 }
+
+.voice-content h1{
+
+    margin:20px 0 8px;
+
+    color:#fff;
+
+    font-size:38px;
+
+    font-weight:700;
+
+    letter-spacing:3px;
+
+}
+
+.voice-status{
+
+    color:#94A3B8;
+
+    font-size:14px;
+
+    font-weight:500;
+
+    letter-spacing:1.2px;
+
+    margin-bottom:26px;
+
+}
+/* =========================================================
+   VOICE MODE CSS
+   PART 2 / 4
+   PASTE BELOW PART 1
+   ========================================================= */
 
 /* ===========================
-   MIC BUTTON
-=========================== */
-
-.mic-toggle{
-
-    width:190px;
-    height:48px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-
-    border:none;
-    border-radius:14px;
-
-    background:linear-gradient(
-        135deg,
-        #2563EB,
-        #3B82F6
-    );
-
-    color:white;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 10px 30px rgba(37,99,235,.28);
-
-    transition:.25s;
-}
-
-.mic-toggle:hover{
-
-    transform:translateY(-2px);
-
-    background:linear-gradient(
-        135deg,
-        #3B82F6,
-        #60A5FA
-    );
-
-}
-.mic-toggle:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 12px 28px rgba(255,185,0,.25);
-
-}
-.mic-toggle:hover{
-
-    transform:translateY(-3px) scale(1.02);
-
-    box-shadow:
-    0 18px 45px rgba(255,188,0,.45);
-
-}
-
-.mic-toggle.inactive{
-
-    background:#2d2d35;
-    color:#ddd;
-}
-
-.mic-toggle:hover{
-    transform:translateY(-2px);
-}
-
-/* ===========================
-   ANIMATIONS
-=========================== */
-
-@keyframes pulse{
-
-0%{
-transform:scale(1);
-}
-
-50%{
-transform:scale(1.05);
-}
-
-100%{
-transform:scale(1);
-}
-
-}
-
-@keyframes breathing{
-
-0%{
-box-shadow:
-0 0 18px rgba(255,190,40,.35);
-}
-
-50%{
-box-shadow:
-0 0 45px rgba(255,190,40,.75);
-}
-
-100%{
-box-shadow:
-0 0 18px rgba(255,190,40,.35);
-}
-
-}
-
-@keyframes ringWave{
-
-0%{
-
-opacity:.25;
-transform:scale(.9);
-
-}
-
-50%{
-
-opacity:1;
-transform:scale(1.08);
-
-}
-
-100%{
-
-opacity:.25;
-transform:scale(.9);
-
-}
-
-}
-
-@keyframes rotateOrb{
-
-from{
-transform:rotate(0deg);
-}
-
-to{
-transform:rotate(360deg);
-}
-
-}
-
-@keyframes speaking{
-
-0%{
-
-transform:scale(1);
-
-}
-
-25%{
-
-transform:scale(1.04);
-
-}
-
-50%{
-
-transform:scale(.98);
-
-}
-
-75%{
-
-transform:scale(1.06);
-
-}
-
-100%{
-
-transform:scale(1);
-
-}
-
-}
-
-@keyframes shake{
-
-0%{transform:translateX(0);}
-25%{transform:translateX(-3px);}
-50%{transform:translateX(3px);}
-75%{transform:translateX(-3px);}
-100%{transform:translateX(0);}
-
-}
-/* ===========================
-VOICE ACTIONS
+   ACTION BUTTONS
 =========================== */
 
 .voice-actions{
@@ -829,33 +306,141 @@ VOICE ACTIONS
     flex-direction:column;
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
     margin-top:12px;
 
 }
+
+.mic-toggle,
+.chat-toggle{
+
+    width:220px;
+    height:50px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    border:none;
+    border-radius:14px;
+
+    cursor:pointer;
+
+    font-size:15px;
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.mic-toggle{
+
+    background:
+    linear-gradient(
+        135deg,
+        #2563EB,
+        #3B82F6
+    );
+
+    color:#fff;
+
+    box-shadow:
+    0 14px 35px rgba(37,99,235,.28);
+
+}
+
+.mic-toggle:hover{
+
+    transform:
+    translateY(-3px)
+    scale(1.02);
+
+    box-shadow:
+    0 20px 45px rgba(37,99,235,.40);
+
+}
+
+.mic-toggle.inactive{
+
+    background:#1F2937;
+
+    color:#CBD5E1;
+
+    box-shadow:none;
+
+}
+
+.chat-toggle{
+
+    background:
+    rgba(255,255,255,.05);
+
+    color:#E2E8F0;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(14px);
+
+}
+
+.chat-toggle:hover{
+
+    transform:
+    translateY(-3px);
+
+    background:
+    rgba(255,255,255,.08);
+
+    border-color:
+    rgba(59,130,246,.30);
+
+}
+
 /* ===========================
-VIEW CHAT BUTTON
+   END BUTTON
 =========================== */
 
-<button
-  className="chat-toggle"
-  onClick={() =>
-    setShowChat(
-      !showChat
-    )
-  }
->
-  <MessageSquare
-    size={18}
-  />
+.voice-end{
 
-  <span>
-    View Chat
-  </span>
-</button>
+    width:220px;
+    height:50px;
+
+    margin-top:26px;
+
+    border:none;
+    border-radius:14px;
+
+    background:#1E293B;
+
+    color:#F1F5F9;
+
+    font-size:15px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.voice-end:hover{
+
+    background:#EF4444;
+
+    color:#fff;
+
+    transform:
+    translateY(-3px);
+
+    box-shadow:
+    0 18px 45px rgba(239,68,68,.35);
+
+}
+
 /* ===========================
-CHAT PANEL
+   CHAT PANEL
 =========================== */
 
 .chat-panel{
@@ -866,27 +451,29 @@ CHAT PANEL
     right:20px;
     bottom:20px;
 
-    width:380px;
+    width:390px;
 
     display:flex;
     flex-direction:column;
 
-    background:rgba(15,23,42,.88);
+    background:
+    rgba(15,23,42,.88);
 
-    backdrop-filter:blur(22px);
+    backdrop-filter:blur(24px);
 
     border:1px solid rgba(255,255,255,.08);
 
     border-radius:24px;
 
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.45);
-
     overflow:hidden;
+
+    box-shadow:
+    0 25px 70px rgba(0,0,0,.45);
 
     animation:chatOpen .28s ease;
 
     z-index:100;
+
 }
 
 .chat-header{
@@ -899,23 +486,52 @@ CHAT PANEL
     justify-content:space-between;
     align-items:center;
 
-    background:rgba(255,255,255,.03);
+    border-bottom:
+    1px solid rgba(255,255,255,.08);
 
-    border-bottom:1px solid rgba(255,255,255,.06);
+    background:
+    rgba(255,255,255,.03);
 
 }
 
 .chat-header h3{
 
-    color:white;
+    color:#fff;
 
     font-size:18px;
 
     font-weight:600;
 
 }
+
+.chat-close{
+
+    width:36px;
+    height:36px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:transparent;
+
+    color:#CBD5E1;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.chat-close:hover{
+
+    background:
+    rgba(255,255,255,.08);
+
+}
+
 /* ===========================
-BODY
+   CHAT BODY
 =========================== */
 
 .chat-body{
@@ -932,16 +548,15 @@ BODY
     gap:16px;
 
 }
+/* =========================================================
+   VOICE MODE CSS
+   PART 3 / 4
+   PASTE BELOW PART 2
+   ========================================================= */
 
-.chat-user,
-.chat-ai{
-
-    padding:14px 16px;
-
-    border-radius:18px;
-
-    line-height:1.6;
-}
+/* ===========================
+   USER MESSAGE
+=========================== */
 
 .chat-user{
 
@@ -953,16 +568,19 @@ BODY
 
     border-radius:18px 18px 4px 18px;
 
-    background:linear-gradient(
+    background:
+    linear-gradient(
         135deg,
         #2563EB,
         #3B82F6
     );
 
-    color:white;
+    color:#fff;
 
     box-shadow:
-        0 8px 24px rgba(37,99,235,.22);
+    0 10px 28px rgba(37,99,235,.25);
+
+    animation:messagePop .25s ease;
 
 }
 
@@ -974,11 +592,9 @@ BODY
 
     font-size:11px;
 
-    font-weight:600;
-
-    opacity:.7;
-
     letter-spacing:1px;
+
+    opacity:.75;
 
     text-transform:uppercase;
 
@@ -990,30 +606,15 @@ BODY
 
     line-height:1.6;
 
-    font-size:14px;
+    white-space:pre-wrap;
+
+    word-break:break-word;
 
 }
-.chat-user strong{
 
-    display:block;
-
-    margin-bottom:8px;
-
-    font-size:12px;
-
-    opacity:.8;
-
-    letter-spacing:1px;
-
-    text-transform:uppercase;
-}
-
-.chat-user p{
-
-    margin:0;
-
-    line-height:1.6;
-}
+/* ===========================
+   AI MESSAGE
+=========================== */
 
 .chat-ai{
 
@@ -1031,6 +632,8 @@ BODY
 
     color:#E5E7EB;
 
+    animation:messagePop .25s ease;
+
 }
 
 .chat-ai strong{
@@ -1039,12 +642,10 @@ BODY
 
     margin-bottom:6px;
 
+    color:#FFD76D;
+
     font-size:11px;
 
-    font-weight:600;
-
-    color:#60A5FA;
-
     letter-spacing:1px;
 
     text-transform:uppercase;
@@ -1056,49 +657,16 @@ BODY
     margin:0;
 
     line-height:1.6;
-
-    font-size:14px;
-
-}
-
-.chat-ai strong{
-
-    display:block;
-
-    margin-bottom:8px;
-
-    color:#ffd76d;
-
-    font-size:12px;
-
-    letter-spacing:1px;
-
-    text-transform:uppercase;
-}
-
-.chat-ai p{
-
-    margin:0;
-
-    line-height:1.6;
-
-    color:#e9e9e9;
-}
-
-.chat-user strong,
-.chat-ai strong{
-
-    display:block;
-
-    margin-bottom:8px;
-}
-
-.chat-user p,
-.chat-ai p{
 
     white-space:pre-wrap;
+
     word-break:break-word;
+
 }
+
+/* ===========================
+   EMPTY STATE
+=========================== */
 
 .chat-empty{
 
@@ -1117,252 +685,20 @@ BODY
     font-size:14px;
 
 }
+
 /* ===========================
-ANIMATION
+   SCROLLBAR
 =========================== */
 
-@keyframes fadeUp{
-
-    from{
-
-        opacity:0;
-        transform:translateY(12px);
-
-    }
-
-    to{
-
-        opacity:1;
-        transform:translateY(0);
-
-    }
-
-}
-@keyframes rotateBG{
-
-    from{
-        transform:rotate(0deg);
-    }
-
-    to{
-        transform:rotate(360deg);
-    }
-
-}
-
-@keyframes pulseGlow{
-
-    0%{
-        transform:scale(.9);
-        opacity:.5;
-    }
-
-    50%{
-        transform:scale(1.1);
-        opacity:1;
-    }
-
-    100%{
-        transform:scale(.9);
-        opacity:.5;
-    }
-
-}
-
-@keyframes fadeIn{
-
-    from{
-        opacity:0;
-        transform:scale(1.03);
-    }
-
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
-
-}
-@keyframes orbFloat{
-
-    0%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-10px);
-    }
-
-    100%{
-        transform:translateY(0);
-    }
-
-}
-
-@keyframes ringSpin{
-
-    from{
-        transform:rotate(0deg);
-    }
-
-    to{
-        transform:rotate(360deg);
-    }
-
-}
-@keyframes chatSlide{
-
-    from{
-        transform:translateX(100%);
-        opacity:0;
-    }
-
-    to{
-        transform:translateX(0);
-        opacity:1;
-    }
-
-}
-@keyframes messagePop{
-
-    from{
-
-        opacity:0;
-
-        transform:
-        translateY(12px)
-        scale(.96);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-        translateY(0)
-        scale(1);
-
-    }
-
-}
-
-@keyframes listeningGlow{
-
-    0%{
-
-        box-shadow:
-        0 0 25px rgba(255,200,0,.35),
-        0 0 60px rgba(255,180,0,.15);
-
-    }
-
-    50%{
-
-        box-shadow:
-        0 0 55px rgba(255,220,70,.8),
-        0 0 120px rgba(255,200,0,.45);
-
-    }
-
-    100%{
-
-        box-shadow:
-        0 0 25px rgba(255,200,0,.35),
-        0 0 60px rgba(255,180,0,.15);
-
-    }
-
-}
-
-@keyframes speakingPulse{
-
-    0%{
-
-        transform:scale(1);
-
-    }
-
-    50%{
-
-        transform:scale(1.08);
-
-    }
-
-    100%{
-
-        transform:scale(1);
-
-    }
-
-}
-
-@keyframes thinkingGlow{
-
-    from{
-
-        filter:hue-rotate(0deg);
-
-    }
-
-    to{
-
-        filter:hue-rotate(45deg);
-
-    }
-
-}
-
-@keyframes errorShake{
-
-    0%{transform:translateX(0);}
-    20%{transform:translateX(-8px);}
-    40%{transform:translateX(8px);}
-    60%{transform:translateX(-6px);}
-    80%{transform:translateX(6px);}
-    100%{transform:translateX(0);}
-
-}
-@keyframes floatGlow{
-
-    0%{
-        transform:translateY(-20px) scale(.95);
-    }
-
-    50%{
-        transform:translateY(20px) scale(1.05);
-    }
-
-    100%{
-        transform:translateY(-20px) scale(.95);
-    }
-
-}
-@keyframes chatOpen{
-
-    from{
-
-        opacity:0;
-
-        transform:
-        translateX(40px)
-        scale(.97);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-        translateX(0)
-        scale(1);
-
-    }
-
-}
 .chat-body::-webkit-scrollbar{
 
     width:6px;
+
+}
+
+.chat-body::-webkit-scrollbar-track{
+
+    background:transparent;
 
 }
 
@@ -1370,7 +706,7 @@ ANIMATION
 
     background:#334155;
 
-    border-radius:20px;
+    border-radius:999px;
 
 }
 
@@ -1380,13 +716,23 @@ ANIMATION
 
 }
 
+/* ===========================
+   MOBILE
+=========================== */
+
 @media (max-width:768px){
 
     .voice-content{
 
+        padding:24px;
+
         max-width:100%;
 
-        padding:24px;
+    }
+
+    .voice-orb{
+
+        transform:scale(.88);
 
     }
 
@@ -1402,9 +748,246 @@ ANIMATION
 
     }
 
-    .voice-orb{
+    .voice-actions{
 
-        transform:scale(.9);
+        width:100%;
+
+    }
+
+    .mic-toggle,
+    .chat-toggle,
+    .voice-end{
+
+        width:100%;
+
+    }
+
+}
+/* =========================================================
+   VOICE MODE CSS
+   PART 4 / 4
+   PASTE BELOW PART 3
+   ========================================================= */
+
+/* ===========================
+   ANIMATIONS
+=========================== */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:scale(1.02);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+@keyframes floatGlow{
+
+    0%{
+        transform:
+        translateY(-20px)
+        scale(.95);
+    }
+
+    50%{
+        transform:
+        translateY(20px)
+        scale(1.05);
+    }
+
+    100%{
+        transform:
+        translateY(-20px)
+        scale(.95);
+    }
+
+}
+
+@keyframes pulse{
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.05);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+
+}
+
+@keyframes breathing{
+
+    0%{
+
+        box-shadow:
+        0 0 18px rgba(255,190,40,.35),
+        0 0 40px rgba(255,190,40,.12);
+
+    }
+
+    50%{
+
+        box-shadow:
+        0 0 50px rgba(255,190,40,.75),
+        0 0 120px rgba(255,190,40,.25);
+
+    }
+
+    100%{
+
+        box-shadow:
+        0 0 18px rgba(255,190,40,.35),
+        0 0 40px rgba(255,190,40,.12);
+
+    }
+
+}
+
+@keyframes ringWave{
+
+    0%{
+
+        transform:scale(.88);
+
+        opacity:.25;
+
+    }
+
+    50%{
+
+        transform:scale(1.08);
+
+        opacity:1;
+
+    }
+
+    100%{
+
+        transform:scale(.88);
+
+        opacity:.25;
+
+    }
+
+}
+
+@keyframes rotateOrb{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+@keyframes speaking{
+
+    0%{
+        transform:scale(1);
+    }
+
+    25%{
+        transform:scale(1.03);
+    }
+
+    50%{
+        transform:scale(.98);
+    }
+
+    75%{
+        transform:scale(1.05);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+
+}
+
+@keyframes shake{
+
+    0%{
+        transform:translateX(0);
+    }
+
+    20%{
+        transform:translateX(-5px);
+    }
+
+    40%{
+        transform:translateX(5px);
+    }
+
+    60%{
+        transform:translateX(-4px);
+    }
+
+    80%{
+        transform:translateX(4px);
+    }
+
+    100%{
+        transform:translateX(0);
+    }
+
+}
+
+@keyframes chatOpen{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateX(40px)
+        scale(.96);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateX(0)
+        scale(1);
+
+    }
+
+}
+
+@keyframes messagePop{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(10px)
+        scale(.97);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0)
+        scale(1);
 
     }
 

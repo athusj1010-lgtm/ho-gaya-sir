@@ -1,5 +1,6 @@
 // src/pages/VoiceMode.tsx
 
+import speech from "../services/speech";
 import { useEffect, useRef, useState } from "react";
 import {
   Mic,
@@ -13,11 +14,7 @@ import "./VoiceMode.css";
 
 import { openHome } from "../services/navigation";
 import { useVoiceContext } from "../context/VoiceContext";
-import {
-  sendMessage,
-  clearHistory,
-} from "../services/chat";
-import speech from "../services/speech";
+import { sendMessage } from "../services/chat";
 
 export default function VoiceMode() {
   const {
@@ -278,8 +275,7 @@ export default function VoiceMode() {
 
         speech.stop();
 
-        clearHistory();
-
+        
         resetVoice();
 
       };

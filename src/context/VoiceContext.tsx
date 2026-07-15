@@ -37,11 +37,14 @@ const defaultVoiceState: VoiceState = {
 
   interimTranscript: "",
 
+  response: "",
+
   isListening: false,
 
   isSpeaking: false,
-};
 
+  error: "",
+};
 const VoiceContext =
   createContext<VoiceContextType | null>(
     null
